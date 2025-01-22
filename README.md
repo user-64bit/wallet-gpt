@@ -36,8 +36,8 @@ cp .env.example .env
 4. Configure the environment variables:
 
 ```bash
-# Set the CHAT_GPT_API_KEY to your OpenAI API key
-CHAT_GPT_API_KEY=YOUR_API_KEY
+# Set the OPENAI_API_KEY to your OpenAI API key
+OPENAI_API_KEY=YOUR_API_KEY
 ```
 
 5. Start the application:

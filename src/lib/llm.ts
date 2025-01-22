@@ -2,7 +2,7 @@ import { SYSTEM_PROMPT } from "@/utils/config";
 import OpenAI from "openai";
 import { Message } from "../utils/types";
 const openai = new OpenAI({
-  apiKey: process.env.CHAT_GPT_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY!,
   dangerouslyAllowBrowser: true,
 });
 

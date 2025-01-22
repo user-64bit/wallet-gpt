@@ -29,7 +29,7 @@ export function WalletDashboard() {
   const getUserSOLBalance = async () => {
     if (!publicKey) return;
     let balance = await getBalance(publicKey.toString(), connection);
-    let transactions = await getLastXTransactions(
+    const transactions = await getLastXTransactions(
       publicKey.toString(),
       connection,
       5,

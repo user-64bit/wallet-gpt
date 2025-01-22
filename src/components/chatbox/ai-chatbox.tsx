@@ -64,7 +64,7 @@ export function AIChat() {
     setInput("");
 
     setIsTyping(true);
-    let chatHistory = messages.map((message) => ({
+    const chatHistory = messages.map((message) => ({
       role: message.role,
       content: message.content,
     }));
