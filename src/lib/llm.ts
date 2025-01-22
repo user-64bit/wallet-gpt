@@ -1,3 +1,5 @@
+"use server";
+
 import { SYSTEM_PROMPT } from "@/utils/config";
 import OpenAI from "openai";
 import { Message } from "../utils/types";
