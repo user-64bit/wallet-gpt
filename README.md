@@ -2,6 +2,7 @@
 
 WalletGPT is a GPT-powered wallet assistant that helps users manage their cryptocurrency wallet using AI Chatbot where user will send message to the bot and bot will respond with the appropriate action and the response. 
 
+[Demo Video](https://drive.google.com/file/d/1OtvBZVGXO_vaNylcZh6dycAGGuIpfeoJ/view)
 ## Features
 
 - User-friendly interface: WalletGPT provides a simple and intuitive interface for users to interact with their cryptocurrency wallets.
