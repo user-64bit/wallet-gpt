@@ -76,6 +76,10 @@ export async function GPTResponse(chatHistory: Message[]) {
               type: "string",
               description: "Response text for user",
             },
+            confirm: {
+              type: "boolean",
+              description: "Confirm the transaction details",
+            },
             misc: {
               type: "boolean",
               description: "Miscellaneous action",

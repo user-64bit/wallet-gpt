@@ -90,7 +90,7 @@ const handleSendCommand = async (
   sendTransaction: any,
   connection: Connection
 ) => {
-  const { amount, toPublicKey } = data;
+  const { amount, toPublicKey, confirm } = data;
   if (!amount || !toPublicKey) {
     return {
       message: "Please provide the amount and recipient address.",
@@ -101,6 +101,18 @@ const handleSendCommand = async (
   if (isNaN(parsedAmount) || parsedAmount <= 0) {
     return {
       message: "Invalid amount. Please provide a valid amount.",
+      status: "error",
+    };
+  }
+  if (!confirm) {
+    return {
+      message:
+        "Please confirm the transaction details before proceeding with the transaction." +
+        "\n\n" +
+        "You are about to send " +
+        amount +
+        "SOL to " +
+        toPublicKey,
       status: "error",
     };
   }
@@ -183,7 +195,8 @@ const handleCreateToken22Command = async (
   connection: Connection,
   sendTransaction: any
 ) => {
-  const { tokenName, tokenSymbol, tokenDecimals, uri, mintAmount } = data;
+  const { tokenName, tokenSymbol, tokenDecimals, uri, mintAmount, confirm } =
+    data;
   const mintKeypair = Keypair.generate();
   const transaction = new Transaction();
   let TokenMintAddress = null;
@@ -298,7 +311,30 @@ const handleCreateToken22Command = async (
       )
     );
   }
-
+  console.log("confirm", confirm);
+  if (!confirm) {
+    return {
+      message:
+        "**Please confirm the transaction details before proceeding with the transaction.**" +
+        "\n\n" +
+        "You are about to create a token with the following details:" +
+        "\n\n" +
+        "**Token Name:** " +
+        tokenName +
+        "\n\n" +
+        "**Token Symbol:** " +
+        tokenSymbol +
+        "\n\n" +
+        "**Token Decimals:** " +
+        tokenDecimals +
+        "\n\n" +
+        "**URI**: " +
+        uri +
+        "\n\n" +
+        "mintAmount: " +
+        mintAmount,
+    };
+  }
   try {
     transaction.feePayer = publicKey;
     transaction.recentBlockhash = (
