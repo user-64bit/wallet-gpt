@@ -8,13 +8,13 @@ export const getBalance = async (publicKey: string, connection: Connection) => {
 export const getLastXTransactions = async (
   publicKey: string,
   connection: Connection,
-  limit: number,
+  limit: number
 ) => {
   const transactions = await connection.getSignaturesForAddress(
     new PublicKey(publicKey),
     {
       limit,
-    },
+    }
   );
   return transactions;
 };

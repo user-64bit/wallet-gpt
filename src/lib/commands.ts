@@ -30,7 +30,7 @@ export default async function triggerCommand(
   data: CommandProps,
   publicKey: PublicKey,
   sendTransaction: any,
-  connection: Connection,
+  connection: Connection
 ) {
   if (!publicKey) {
     return {
@@ -46,7 +46,7 @@ export default async function triggerCommand(
         data,
         publicKey,
         sendTransaction,
-        connection,
+        connection
       );
       return response;
     case "buy":
@@ -56,11 +56,11 @@ export default async function triggerCommand(
       response = await handleSwapCommand();
       return response;
     case "create_token":
-      response = await handleCreateTokenBatchTransactionCommand(
+      response = await handleCreateToken22Command(
         data,
         publicKey,
         connection,
-        sendTransaction,
+        sendTransaction
       );
       return response;
     case "check_balance":
@@ -88,7 +88,7 @@ const handleSendCommand = async (
   data: CommandProps,
   publicKey: PublicKey,
   sendTransaction: any,
-  connection: Connection,
+  connection: Connection
 ) => {
   const { amount, toPublicKey } = data;
   if (!amount || !toPublicKey) {
@@ -111,7 +111,7 @@ const handleSendCommand = async (
         fromPubkey: publicKey,
         toPubkey: new PublicKey(toPublicKey),
         lamports: LAMPORTS_PER_SOL * parsedAmount,
-      }),
+      })
     );
     const signature = await sendTransaction(transaction, connection);
     const status = await connection.getSignatureStatus(signature, {
@@ -177,11 +177,11 @@ const handleSwapCommand = async () => {
   };
 };
 
-const handleCreateTokenBatchTransactionCommand = async (
+const handleCreateToken22Command = async (
   data: CommandProps,
   publicKey: PublicKey,
   connection: Connection,
-  sendTransaction: any,
+  sendTransaction: any
 ) => {
   const { tokenName, tokenSymbol, tokenDecimals, uri, mintAmount } = data;
   const mintKeypair = Keypair.generate();
@@ -222,7 +222,7 @@ const handleCreateTokenBatchTransactionCommand = async (
     const mintLen = getMintLen([ExtensionType.MetadataPointer]);
     const metaDataLen = TYPE_SIZE + LENGTH_SIZE + pack(metaData).length;
     const lamports = await connection.getMinimumBalanceForRentExemption(
-      mintLen + metaDataLen,
+      mintLen + metaDataLen
     );
 
     transaction.add(
@@ -237,14 +237,14 @@ const handleCreateTokenBatchTransactionCommand = async (
         mintKeypair.publicKey,
         publicKey,
         publicKey,
-        TOKEN_2022_PROGRAM_ID,
+        TOKEN_2022_PROGRAM_ID
       ),
       createInitializeMintInstruction(
         mintKeypair.publicKey,
         Number(tokenDecimals),
         publicKey,
         null,
-        TOKEN_2022_PROGRAM_ID,
+        TOKEN_2022_PROGRAM_ID
       ),
       createInitializeInstruction({
         programId: TOKEN_2022_PROGRAM_ID,
@@ -255,7 +255,7 @@ const handleCreateTokenBatchTransactionCommand = async (
         uri: metaData.uri,
         updateAuthority: publicKey,
         mintAuthority: publicKey,
-      }),
+      })
     );
   }
 
@@ -265,7 +265,7 @@ const handleCreateTokenBatchTransactionCommand = async (
       TokenMintAddress,
       publicKey,
       false,
-      TOKEN_2022_PROGRAM_ID,
+      TOKEN_2022_PROGRAM_ID
     );
     transaction.add(
       createAssociatedTokenAccountInstruction(
@@ -273,8 +273,8 @@ const handleCreateTokenBatchTransactionCommand = async (
         associatedTokenAddress,
         publicKey,
         TokenMintAddress,
-        TOKEN_2022_PROGRAM_ID,
-      ),
+        TOKEN_2022_PROGRAM_ID
+      )
     );
   }
 
@@ -284,7 +284,7 @@ const handleCreateTokenBatchTransactionCommand = async (
         TokenMintAddress,
         publicKey,
         false,
-        TOKEN_2022_PROGRAM_ID,
+        TOKEN_2022_PROGRAM_ID
       );
     }
     transaction.add(
@@ -294,8 +294,8 @@ const handleCreateTokenBatchTransactionCommand = async (
         publicKey,
         Number(mintAmount) * Math.pow(10, Number(tokenDecimals)),
         [],
-        TOKEN_2022_PROGRAM_ID,
-      ),
+        TOKEN_2022_PROGRAM_ID
+      )
     );
   }
 
@@ -335,7 +335,7 @@ const handleCreateTokenBatchTransactionCommand = async (
 };
 const handleCheckBalanceCommand = async (
   publicKey: PublicKey,
-  connection: Connection,
+  connection: Connection
 ) => {
   if (!publicKey) {
     return {
@@ -363,7 +363,7 @@ const handleGetAddressCommand = async (publicKey: PublicKey) => {
 };
 const handleTransactionStatusCommand = async (
   publicKey: PublicKey,
-  connection: Connection,
+  connection: Connection
 ) => {
   if (!publicKey) {
     return {
@@ -374,7 +374,7 @@ const handleTransactionStatusCommand = async (
   const transactions = await getLastXTransactions(
     publicKey.toString(),
     connection,
-    1,
+    1
   );
   return {
     message: `Your last transaction's status is: ${transactions[0].confirmationStatus}`,
@@ -383,7 +383,7 @@ const handleTransactionStatusCommand = async (
 };
 const handleRecentTransactionCommand = async (
   publicKey: PublicKey,
-  connection: Connection,
+  connection: Connection
 ) => {
   if (!publicKey) {
     return {
@@ -394,7 +394,7 @@ const handleRecentTransactionCommand = async (
   const transactions = await getLastXTransactions(
     publicKey.toString(),
     connection,
-    5,
+    5
   );
   return {
     // message: `Your last 5 transactions's status are: ${transactions.map((transaction) => "| " + transaction.confirmationStatus + " |")}`,
@@ -408,7 +408,7 @@ const handleRecentTransactionCommand = async (
             transaction.confirmationStatus +
             "](https://solscan.io/tx/" +
             transaction.signature +
-            "?cluster=devnet) |",
+            "?cluster=devnet) |"
         )
         .join("\n"),
     status: "success",

@@ -16,14 +16,16 @@ export function AIChat() {
   const messageRef = useRef<HTMLDivElement>(null);
   const { publicKey, sendTransaction } = useWallet();
   const { connection } = useConnection();
-  // Todo: we can store this to local storage (not db because it will be too much for an example)
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      content: "Hello! I'm your AI crypto assistant. How can I help you today?",
-      role: "system",
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>(
+    JSON.parse(localStorage.getItem("messages") as string) || [
+      {
+        id: 1,
+        content:
+          "Hello! I'm your AI crypto assistant. How can I help you today?",
+        role: "system",
+      },
+    ]
+  );
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
 
@@ -38,6 +40,7 @@ export function AIChat() {
     if (messageRef.current) {
       messageRef.current.scrollIntoView({ behavior: "smooth" });
     }
+    localStorage.setItem("messages", JSON.stringify(messages));
   }, [messages]);
 
   const handleSend = async (content: string) => {
@@ -76,7 +79,7 @@ export function AIChat() {
       chatHistory,
       publicKey,
       sendTransaction,
-      connection,
+      connection
     );
     const aiMessage: Message = {
       id: messages.length + 2,
@@ -98,7 +101,9 @@ export function AIChat() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className={`flex items-start gap-3 break-words ${message.role === "user" ? "flex-row-reverse" : ""}`}
+                className={`flex items-start gap-3 break-words ${
+                  message.role === "user" ? "flex-row-reverse" : ""
+                }`}
               >
                 <div
                   className={`p-2 rounded-full ${
