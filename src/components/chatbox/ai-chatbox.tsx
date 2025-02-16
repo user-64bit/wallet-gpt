@@ -16,16 +16,13 @@ export function AIChat() {
   const messageRef = useRef<HTMLDivElement>(null);
   const { publicKey, sendTransaction } = useWallet();
   const { connection } = useConnection();
-  const [messages, setMessages] = useState<Message[]>(
-    JSON.parse(localStorage.getItem("messages") as string) || [
-      {
-        id: 1,
-        content:
-          "Hello! I'm your AI crypto assistant. How can I help you today?",
-        role: "system",
-      },
-    ]
-  );
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: 1,
+      content: "Hello! I'm your AI crypto assistant. How can I help you today?",
+      role: "system",
+    },
+  ]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
 
@@ -36,6 +33,9 @@ export function AIChat() {
     "Create Token Named GOKU and assume other details",
   ];
 
+  useEffect(() => {
+    setMessages(JSON.parse(localStorage.getItem("messages") || "[]"));
+  }, []);
   useEffect(() => {
     if (messageRef.current) {
       messageRef.current.scrollIntoView({ behavior: "smooth" });
